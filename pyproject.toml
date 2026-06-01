@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lattice-dirac-spectra"
+version = "0.1.0"
+description = "Eigenvalue spectra of Wilson-type and overlap lattice Dirac operators: free-field, U(1)-gauged, and stochastic mock spectra, with Brillouin-zone visualization."
+authors = [{ name = "Stylianos Gregoriou", email = "s.gregoriou@cyi.ac.cy" }]
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = [
+    "numpy",
+    "scipy",
+    "h5py",
+    "matplotlib",
+    "click",
+]
+
+[project.optional-dependencies]
+# Interactive analysis with Jupyter notebooks
+notebooks = ["jupyter", "notebook", "ipykernel", "pandas"]
+# Development: notebooks + testing/linting
+dev = [
+    "jupyter",
+    "notebook",
+    "ipykernel",
+    "pandas",
+    "pytest",
+    "pytest-cov",
+    "black",
+    "ruff",
+]
+
+[project.urls]
+Homepage = "https://github.com/Stylianos29/lattice-dirac-spectra"
+Repository = "https://github.com/Stylianos29/lattice-dirac-spectra"
+
+[tool.setuptools.packages.find]
+where = ["core"]
+include = ["lattice_dirac_spectra*"]
+
+[tool.pytest.ini_options]
+testpaths = ["core/tests"]
+python_files = ["test_*.py"]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
