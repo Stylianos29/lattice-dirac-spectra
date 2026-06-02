@@ -23,12 +23,25 @@ from lattice_dirac_spectra.visualization.brillouin_zone import (  # noqa: E402
 
 
 @click.command()
-@click.option("--lap", "lap_name", default=None, help="Laplacian key (std/til/bri/iso).")
+@click.option(
+    "--lap", "lap_name", default=None, help="Laplacian key (std/til/bri/iso)."
+)
 @click.option("--der", "der_name", default=None, help="Derivative key (std/bri/iso).")
-@click.option("--mu", default=0, show_default=True, help="Derivative direction (for --der).")
-@click.option("--dim", "d", default=2, show_default=True, help="Lattice dimensionality.")
-@click.option("--grid", "grid_size", default=48, show_default=True, help="Samples per axis.")
-@click.option("--kind", default="surface", type=click.Choice(["surface", "contour"]), show_default=True)
+@click.option(
+    "--mu", default=0, show_default=True, help="Derivative direction (for --der)."
+)
+@click.option(
+    "--dim", "d", default=2, show_default=True, help="Lattice dimensionality."
+)
+@click.option(
+    "--grid", "grid_size", default=48, show_default=True, help="Samples per axis."
+)
+@click.option(
+    "--kind",
+    default="surface",
+    type=click.Choice(["surface", "contour"]),
+    show_default=True,
+)
 @click.option("-o", "--output", "out", default=None, help="Output PNG path.")
 def main(lap_name, der_name, mu, d, grid_size, kind, out):
     """Render a Laplacian (--lap) or derivative (--der) Brillouin-zone surface."""
@@ -39,7 +52,9 @@ def main(lap_name, der_name, mu, d, grid_size, kind, out):
         fig, _ = plot_laplacian_surface(lap_name, d=d, grid_size=grid_size, kind=kind)
         default_name = f"lap_{lap_name}_{kind}.png"
     else:
-        fig, _ = plot_derivative_surface(der_name, mu=mu, d=d, grid_size=grid_size, kind=kind)
+        fig, _ = plot_derivative_surface(
+            der_name, mu=mu, d=d, grid_size=grid_size, kind=kind
+        )
         default_name = f"der_{der_name}_mu{mu}_{kind}.png"
 
     out_path = Path(out) if out else Path("output/plots") / default_name

@@ -111,7 +111,9 @@ def dispersion_relation(
     """
     direction = np.asarray(direction, dtype=float)
     if direction.shape != (d - 1,):
-        raise ValueError(f"direction must have length d-1 = {d - 1}, got {direction.shape}.")
+        raise ValueError(
+            f"direction must have length d-1 = {d - 1}, got {direction.shape}."
+        )
     norm = np.linalg.norm(direction)
     nhat = direction / norm if norm > 0 else direction
     m_eff = (np.exp(m) - 1.0) if heavy_quark else m
@@ -162,14 +164,26 @@ def plot_dispersion(
     styles = ["-", "-.", "--", ":"]
     for k, direction in enumerate(directions):
         E = dispersion_relation(
-            lap_name, der_name, d, direction, P_values,
-            m=m, heavy_quark=heavy_quark,
+            lap_name,
+            der_name,
+            d,
+            direction,
+            P_values,
+            m=m,
+            heavy_quark=heavy_quark,
         )
         label = "along (" + ",".join(str(int(c)) for c in direction) + ")"
         ax.plot(P_values, E, styles[k % len(styles)], label=label)
 
     # Continuum relation: aE = sqrt(P^2 + m^2)
-    ax.plot(P_values, np.sqrt(P_values**2 + m**2), "k:", lw=1.0, alpha=0.7, label="continuum")
+    ax.plot(
+        P_values,
+        np.sqrt(P_values**2 + m**2),
+        "k:",
+        lw=1.0,
+        alpha=0.7,
+        label="continuum",
+    )
 
     ax.set_xlabel(r"$\sqrt{\sum_i a^2 p_i^2}$")
     ax.set_ylabel(r"$aE$")

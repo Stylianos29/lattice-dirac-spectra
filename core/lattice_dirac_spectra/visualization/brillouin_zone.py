@@ -143,7 +143,9 @@ def plot_laplacian_surface(
 ):
     """Plot the Laplacian Fourier surface ``Delta.hat(k)`` over a BZ slice."""
     K0, K1, Z = laplacian_surface_data(lap_name, d, grid_size, axes=axes, fixed=fixed)
-    return plot_surface(K0, K1, Z, kind=kind, ax=ax, title=fr"$\hat{{\Delta}}_{{\rm {lap_name}}}$")
+    return plot_surface(
+        K0, K1, Z, kind=kind, ax=ax, title=rf"$\hat{{\Delta}}_{{\rm {lap_name}}}$"
+    )
 
 
 def plot_derivative_surface(
@@ -158,8 +160,14 @@ def plot_derivative_surface(
     fixed: Optional[Dict[int, float]] = None,
 ):
     """Plot the derivative Fourier surface ``Im nabla_mu.hat(k)`` over a BZ slice."""
-    K0, K1, Z = derivative_surface_data(der_name, mu, d, grid_size, axes=axes, fixed=fixed)
+    K0, K1, Z = derivative_surface_data(
+        der_name, mu, d, grid_size, axes=axes, fixed=fixed
+    )
     return plot_surface(
-        K0, K1, Z, kind=kind, ax=ax,
-        title=fr"$\mathrm{{Im}}\,\hat{{\nabla}}^{{\rm {der_name}}}_{{{mu}}}$",
+        K0,
+        K1,
+        Z,
+        kind=kind,
+        ax=ax,
+        title=rf"$\mathrm{{Im}}\,\hat{{\nabla}}^{{\rm {der_name}}}_{{{mu}}}$",
     )

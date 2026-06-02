@@ -153,7 +153,7 @@ deps `numpy scipy h5py matplotlib click`; extras `notebooks`, `dev`.
 
 ---
 
-## 6. Capability 2 — U(1)-gauged spectra  [M3]
+## 6. Capability 2 — U(1)-gauged spectra  [IMPLEMENTED]
 
 ### 6.1 The `u1-hmc` data contract (verified against the source repo)
 HDF5 written by `g-koutsou/u1-hmc` `gauge.save()`:
@@ -209,9 +209,9 @@ formula-vs-direct overlay, ensemble clouds, GW circles).
 
 Unit tests mirror module layout (pytest). Never let these break:
 1. Free-field formula == direct diagonalization (≤1e-10), all 12 ops, d∈{2,4}.  **[passing]**
-2. Gauged operator with links=1 == free-field operator (bit-for-bit).  [M3]
+2. Gauged operator with links=1 == free-field operator (bit-for-bit).  **[passing]**
 3. Mock spectrum at σ=0 == free-field formula (exact).  [M4]
-4. Plaquette/topo recomputed from a loaded config == stored attrs (≤1e-10).  [M3]
+4. Plaquette/topo recomputed from a loaded config == stored attrs (≤1e-10).  **[passing]**
 5. Overlap of any free-field kernel spectrum lies on the GW circle (≤1e-12).  **[passing]**
 
 `core/tests/mock_data/` will hold one tiny (4×4) U(1) HDF5 ensemble for offline
@@ -233,7 +233,7 @@ CI of the reader and gauged-spectrum tests.
 - **M0 — Scaffold.** Tree, packaging, constants, logging. **[done]**
 - **M1 — Free field.** operators/ + spectra/free_field.py + invariants #1,#5. **[done]**
 - **M2 — Visualization.** BZ surfaces, dispersion, spectrum scatter.
-- **M3 — U(1) gauged.** U1Config reader (+ tiny ensemble), covariant op, gauged spectrum; invariants #2,#4.
+- **M3 — U(1) gauged.** U1Config reader (+ tiny ensemble), covariant op, gauged spectrum; invariants #2,#4. **[done]**
 - **M4 — Mock + overlap.** recipe, overlap, KL approximants, condition numbers; invariants #3,#5(mock).
 - **M5 — Research: σ(β).** Match mock to gauged across β; test σ²∝1/β.
 

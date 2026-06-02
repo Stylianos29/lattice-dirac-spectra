@@ -23,11 +23,19 @@ from lattice_dirac_spectra.visualization.dispersion import plot_dispersion  # no
 
 @click.command()
 @click.option("--kernel", default=None, help="Named kernel: Wilson or Brillouin.")
-@click.option("--lap", "lap_name", default=None, help="Laplacian key (overrides --kernel).")
-@click.option("--der", "der_name", default=None, help="Derivative key (overrides --kernel).")
-@click.option("--dim", "d", default=4, show_default=True, help="Lattice dimensionality.")
+@click.option(
+    "--lap", "lap_name", default=None, help="Laplacian key (overrides --kernel)."
+)
+@click.option(
+    "--der", "der_name", default=None, help="Derivative key (overrides --kernel)."
+)
+@click.option(
+    "--dim", "d", default=4, show_default=True, help="Lattice dimensionality."
+)
 @click.option("--mass", "m", default=0.0, show_default=True, help="Bare mass am.")
-@click.option("--heavy-quark", is_flag=True, help="Use the am -> exp(am)-1 substitution.")
+@click.option(
+    "--heavy-quark", is_flag=True, help="Use the am -> exp(am)-1 substitution."
+)
 @click.option("--pmax", default=5.0, show_default=True, help="Max |ap| on the x-axis.")
 @click.option("-o", "--output", "out", default=None, help="Output PNG path.")
 def main(kernel, lap_name, der_name, d, m, heavy_quark, pmax, out):

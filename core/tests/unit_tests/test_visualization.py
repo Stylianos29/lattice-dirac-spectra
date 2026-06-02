@@ -30,7 +30,9 @@ from lattice_dirac_spectra.visualization.spectrum_plotter import (  # noqa: E402
     plot_formula_vs_direct,
     plot_overlap_spectrum,
 )
-from lattice_dirac_spectra.spectra.free_field import eigenvalues_from_formula  # noqa: E402
+from lattice_dirac_spectra.spectra.free_field import (
+    eigenvalues_from_formula,
+)  # noqa: E402
 from lattice_dirac_spectra.operators.overlap import overlap_eigenvalues  # noqa: E402
 
 
@@ -44,8 +46,8 @@ def test_surface_shapes():
 def test_brillouin_laplacian_constant_on_boundary():
     # a^2 Delta_bri.hat is constant (= -4) on the entire BZ boundary.
     _, _, Z = laplacian_surface_data("bri", d=2, grid_size=24)
-    assert np.allclose(Z[:, -1], -4.0)   # k0 = pi column
-    assert np.allclose(Z[-1, :], -4.0)   # k1 = pi row
+    assert np.allclose(Z[:, -1], -4.0)  # k0 = pi column
+    assert np.allclose(Z[-1, :], -4.0)  # k1 = pi row
     # The standard Laplacian is NOT constant on the boundary.
     _, _, Zs = laplacian_surface_data("std", d=2, grid_size=24)
     assert not np.allclose(Zs[:, -1], Zs[0, -1])
@@ -91,7 +93,9 @@ def test_default_directions():
 def test_heavy_quark_substitution_changes_rest_energy():
     # With am -> exp(am)-1, the p=0 Wilson energy becomes log(exp(am)) = am.
     m = 0.5
-    E = dispersion_relation("std", "std", 2, (1,), np.array([0.0]), m=m, heavy_quark=True)[0]
+    E = dispersion_relation(
+        "std", "std", 2, (1,), np.array([0.0]), m=m, heavy_quark=True
+    )[0]
     assert np.isclose(E, m, atol=1e-6)
 
 

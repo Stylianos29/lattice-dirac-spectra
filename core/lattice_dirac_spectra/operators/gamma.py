@@ -10,7 +10,7 @@ from typing import List
 
 import numpy as np
 
-__all__ = ["gamma_matrices", "pauli_matrices"]
+__all__ = ["gamma_matrices", "pauli_matrices", "gamma5"]
 
 
 def pauli_matrices() -> List[np.ndarray]:
@@ -55,3 +55,37 @@ def gamma_matrices(d: int) -> List[np.ndarray]:
             np.kron(s2, I2),
         ]
     raise ValueError(f"gamma_matrices is only defined for d in {{2,3,4}}, got d={d}.")
+
+
+def gamma5(d: int) -> np.ndarray:
+    """Chirality matrix ``gamma5`` for an even-dimensional lattice.
+
+    Defined (up to an overall phase fixed by Hermiticity) as the ordered product
+    of all gamma matrices, normalized so that ``gamma5`` is Hermitian and
+    ``gamma5**2 = 1``. It anticommutes with every ``gamma_mu``.
+
+    Only defined for even ``d`` (2 or 4); odd ``d`` has no nontrivial chirality
+    operator in this representation.
+
+    Parameters
+    ----------
+    d : int
+        Lattice dimensionality (must be even: 2 or 4).
+
+    Returns
+    -------
+    ndarray
+        The ``Ns x Ns`` chirality matrix.
+    """
+    if d % 2 != 0:
+        raise ValueError(f"gamma5 is only defined for even d, got d={d}.")
+    gammas = gamma_matrices(d)
+    g5 = gammas[0]
+    for g in gammas[1:]:
+        g5 = g5 @ g
+    # Fix the phase so that g5 is Hermitian (it is either Hermitian or
+    # anti-Hermitian as built); multiply by i in the latter case.
+    if not np.allclose(g5, g5.conj().T):
+        g5 = 1j * g5
+    # Normalize sign so that the (0,0) entry is +1 when real (cosmetic, stable).
+    return g5
