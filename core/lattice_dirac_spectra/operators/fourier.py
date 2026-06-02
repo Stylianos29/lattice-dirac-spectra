@@ -28,14 +28,18 @@ def eval_stencil_fourier(stencil: np.ndarray, norm: int, phi: np.ndarray) -> np.
     norm : int
         Stencil normalization.
     phi : ndarray, shape ``(N, d)``
-        Real phase vectors (lattice momenta, possibly perturbed).
+        Phase vectors (lattice momenta, possibly perturbed). May be complex --
+        e.g. a temporal momentum continued to ``i E`` for dispersion relations --
+        in which case the result is evaluated analytically at the complex phase.
 
     Returns
     -------
     ndarray, shape ``(N,)``, complex
         The momentum-space representation at each phase vector.
     """
-    phi = np.asarray(phi, dtype=float)
+    phi = np.asarray(phi)
+    if not np.iscomplexobj(phi):
+        phi = phi.astype(float)
     result = np.zeros(phi.shape[0], dtype=complex)
     for idx in np.ndindex(stencil.shape):
         w = int(stencil[idx])
