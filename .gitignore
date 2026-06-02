@@ -20,6 +20,8 @@ env/
 .coverage
 htmlcov/
 coverage.xml
+# test gauge configurations
+core/tests/mock_data/*.h5
 
 # Data (large gauge ensembles) and generated outputs
 data_files/raw/*
