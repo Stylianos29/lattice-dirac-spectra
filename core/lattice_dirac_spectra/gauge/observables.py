@@ -19,7 +19,7 @@ conjugation.
 
 from typing import Tuple
 
-import numpy as np # type: ignore
+import numpy as np  # type: ignore
 
 __all__ = ["plaquette_field", "plaquette", "topological_charge"]
 

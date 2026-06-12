@@ -30,8 +30,8 @@ Reading is serial; no MPI is required.
 from dataclasses import dataclass, field
 from typing import Dict, Iterator, List, Optional, Tuple
 
-import h5py # type: ignore
-import numpy as np # type: ignore
+import h5py  # type: ignore
+import numpy as np  # type: ignore
 
 from .observables import plaquette, topological_charge
 

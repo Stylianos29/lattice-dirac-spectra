@@ -27,4 +27,12 @@ from .covariant import (  # noqa: F401
     gauge_transform,
 )
 from .smearing import ape_smear  # noqa: F401
-from .synthetic import unit_links  # noqa: F401
+
+from .synthetic import (  # noqa: F401
+    unit_links,
+    random_phase_links,
+    eps_for_plaquette,
+    plaquette_2d,
+    heatbath_links,
+    generate_heatbath_ensemble,
+)

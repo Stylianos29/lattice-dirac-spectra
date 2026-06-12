@@ -1,17 +1,18 @@
 """Integration: the unit-field HDF5 round-trip ties the gauged operator to the
 free-field formula across 2D/3D/4D, and the on-disk convention is involutive."""
 
-import numpy as np # type: ignore
-import pytest # type: ignore
+import numpy as np  # type: ignore
+import pytest  # type: ignore
 
 from lattice_dirac_spectra.gauge.u1_config import save_config, load_config, _to_native
 from lattice_dirac_spectra.gauge.synthetic import unit_links
 from lattice_dirac_spectra.spectra.gauged import gauged_spectrum
 from lattice_dirac_spectra.spectra.free_field import (
-    eigenvalues_from_formula, compare_eigenvalues,
+    eigenvalues_from_formula,
+    compare_eigenvalues,
 )
 
-KERNELS = [("std", "std"), ("iso", "bri")]   # (derivative, laplacian)
+KERNELS = [("std", "std"), ("iso", "bri")]  # (derivative, laplacian)
 
 
 @pytest.mark.parametrize("d,L", [(2, 8), (3, 4), (4, 3)])
@@ -38,7 +39,7 @@ def test_save_load_roundtrip_identity(tmp_path, shape):
     path = str(tmp_path / "cfg.h5")
     save_config(path, links, beta=1.0, metadata={"plaquette": 0.0, "topo": 0.0})
     cfg = load_config(path, 1.0, "traj00000000")
-    assert np.array_equal(cfg.links, links)        # involutive bridge
+    assert np.array_equal(cfg.links, links)  # involutive bridge
 
 
 def test_2d_bridge_backward_compatible():

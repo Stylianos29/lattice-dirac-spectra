@@ -23,7 +23,7 @@ group-specific.
 from itertools import permutations, product as iproduct
 from typing import Tuple
 
-import numpy as np # type: ignore
+import numpy as np  # type: ignore
 
 from ..constants.physics import Ns
 from ..operators.gamma import gamma_matrices
