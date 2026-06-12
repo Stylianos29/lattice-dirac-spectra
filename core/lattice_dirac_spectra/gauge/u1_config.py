@@ -30,8 +30,10 @@ Reading is serial; no MPI is required.
 from dataclasses import dataclass, field
 from typing import Dict, Iterator, List, Optional, Tuple
 
-import h5py
-import numpy as np
+import h5py # type: ignore
+import numpy as np # type: ignore
+
+from .observables import plaquette, topological_charge
 
 __all__ = [
     "U1Config",
@@ -39,6 +41,7 @@ __all__ = [
     "list_trajectories",
     "load_config",
     "load_ensemble",
+    "save_config",
 ]
 
 
@@ -70,7 +73,8 @@ class U1Config:
 
     @property
     def dim(self) -> int:
-        """Lattice dimensionality (2 for U(1) HMC configs)."""
+        """Lattice dimensionality (2D for u1-hmc files; 3D/4D for
+        synthetic unit fields)."""
         return self.links.shape[-1]
 
 
@@ -100,9 +104,20 @@ def list_trajectories(path: str, beta: float) -> List[str]:
         return sorted(f[grp].keys())
 
 
+def _axis_perm(d: int) -> Tuple[int, ...]:
+    """Reverse the ``d`` spatial axes, keep the ``mu`` axis last. Involutive."""
+    return tuple(range(d - 1, -1, -1)) + (d,)
+
+
 def _to_native(dataset: np.ndarray) -> np.ndarray:
-    """Bridge the u1-hmc layout (Ly, Lx, 2) to native (Lx, Ly, 2)."""
-    return np.ascontiguousarray(np.asarray(dataset).transpose(1, 0, 2))
+    """Bridge the on-disk layout to native ``links[x0, ..., x_{d-1}, mu]`` order.
+
+    The on-disk convention reverses the spatial axes relative to native; for
+    ``d = 2`` this is the u1-hmc ``(Ly, Lx, 2)`` layout and the permutation
+    reduces to the historical ``transpose(1, 0, 2)``.
+    """
+    arr = np.asarray(dataset)
+    return np.ascontiguousarray(arr.transpose(_axis_perm(arr.shape[-1])))
 
 
 def load_config(path: str, beta: float, traj: str) -> U1Config:
@@ -140,3 +155,43 @@ def load_ensemble(
         trajs = trajs[pick]
     for traj in trajs:
         yield load_config(path, beta, traj)
+
+
+def save_config(
+    path: str,
+    links: np.ndarray,
+    beta: float,
+    traj_index: int = 0,
+    metadata: Optional[Dict[str, float]] = None,
+    mode: str = "w",
+) -> None:
+    """Write one configuration to the u1-hmc-format HDF5 layout (inverse of load_config).
+
+    ``links`` is in native ``links[x0, ..., x_{d-1}, mu]`` order and is stored on
+    disk in the reversed-spatial-axis convention the reader expects, so
+    ``load_config`` round-trips it to the identity in any dimension (and 2D files
+    stay u1-hmc compatible). Plaquette (any d) and topological charge (d=2 only)
+    are computed from the links and saved as group attributes unless overridden.
+
+    Use ``mode="a"`` to append more trajectories/betas to an existing file.
+    """
+    links = np.asarray(links)
+    d = links.shape[-1]
+    meta = {
+        "plaquette": plaquette(links),
+        "topo": topological_charge(links) if d == 2 else 0.0,
+        "dH": 0.0,
+        "T": 0.0,
+        "tau": 0.0,
+        "NT": 0.0,
+    }
+    if metadata:
+        meta.update(metadata)
+    disk = np.ascontiguousarray(links.transpose(_axis_perm(d)))
+    grp = _beta_group_name(beta)
+    traj = "traj{:08.0f}".format(traj_index)
+    with h5py.File(path, mode) as f:
+        node = f.require_group(grp).create_group(traj)
+        node.create_dataset("u", data=disk)
+        for k, v in meta.items():
+            node.attrs[k] = float(v)

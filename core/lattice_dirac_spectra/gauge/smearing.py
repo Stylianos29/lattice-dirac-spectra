@@ -11,7 +11,7 @@ Convention matches the rest of the package: ``links[x, mu]`` is the forward link
 ``U_mu(x)`` along lattice axis ``mu``.
 """
 
-import numpy as np
+import numpy as np # type: ignore
 
 __all__ = ["ape_smear"]
 
